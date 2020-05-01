@@ -1,0 +1,22 @@
+{
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "files.autoSave": "onFocusChange",
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "explorer.confirmDelete": false,
+    "workbench.startupEditor": "newUntitledFile",
+    "explorer.confirmDragAndDrop": false,
+    "workbench.iconTheme": "vscode-icons",
+    "python.autoComplete.addBrackets": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "[python]": {
+    
+  },
+  "terminal.integrated.cursorStyle": "line",
+  "python.testing.pytestEnabled": true,
+  "workbench.activityBar.visible": true,
+  "editor.renderWhitespace": "all",
+}
