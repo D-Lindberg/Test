@@ -1,0 +1,7 @@
+d@pop-os:~$ git config --global -l
+core.excludesfile=~/.gitignore_global
+core.editor=code -n -w
+user.name=Daniel
+user.email=58619523+D-Lindberg@users.noreply.github.com
+credential.helper=cache
+credential.helper=cache

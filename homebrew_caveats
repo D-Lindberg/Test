@@ -1,0 +1,74 @@
+=> Pouring gcc-5.5.0_7.x86_64_linux.bottle.tar.gz
+==> Creating the GCC specs file: /home/linuxbrew/.linuxbrew/Cellar/gcc/5.5.0_7/lib/gcc/x86_64
+🍺  /home/linuxbrew/.linuxbrew/Cellar/gcc/5.5.0_7: 1,350 files, 174.8MB
+==> Caveats
+==> isl@0.18
+isl@0.18 is keg-only, which means it was not symlinked into /home/linuxbrew/.linuxbrew,
+because this is an alternate version of another formula.
+
+For compilers to find isl@0.18 you may need to set:
+  export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/isl@0.18/lib"
+  export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/opt/isl@0.18/include"
+
+For pkg-config to find isl@0.18 you may need to set:
+  export PKG_CONFIG_PATH="/home/linuxbrew/.linuxbrew/opt/isl@0.18/lib/pkgconfig"
+
+
+
+postgresql issues
+==> postgresql
+To migrate existing data from a previous major version of PostgreSQL run:
+  brew postgresql-upgrade-database
+
+Warning: postgresql provides a launchd plist which can only be used on macOS!
+You can manually execute the service instead with:
+  pg_ctl -D /home/linuxbrew/.linuxbrew/var/postgres start
+d@pop-os:~$ 
+
+
+
+
+==> python
+Python has been installed as
+  /home/linuxbrew/.linuxbrew/bin/python3
+
+Unversioned symlinks `python`, `python-config`, `pip` etc. pointing to
+`python3`, `python3-config`, `pip3` etc., respectively, have been installed into
+  /home/linuxbrew/.linuxbrew/opt/python/libexec/bin
+
+You can install Python packages with
+  pip3 install <package>
+They will install into the site-package directory
+  /home/linuxbrew/.linuxbrew/lib/python3.7/site-packages
+
+
+
+
+
+
+nvm
+==> Caveats
+Please note that upstream has asked us to make explicit managing
+nvm via Homebrew is unsupported by them and you should check any
+problems against the standard nvm install method prior to reporting.
+
+You should create NVM's working directory if it doesn't exist:
+
+  mkdir ~/.nvm
+
+Add the following to ~/.bash_profile or your desired shell
+configuration file:
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && . "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+You can set $NVM_DIR to any location, but leaving it unchanged from
+/home/linuxbrew/.linuxbrew/opt/nvm will destroy any nvm-installed Node installations
+upon upgrade/reinstall.
+
+Type `nvm help` for further information.
+
+Bash completion has been installed to:
+  /home/linuxbrew/.linuxbrew/etc/bash_completion.d
+

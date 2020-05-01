@@ -1,0 +1,63 @@
+##########################################################################################################################
+
+############
+start here
+mod-
+##########
+font-
+##########
+set colors-
+
+set resources for rofi-
+    call rofi
+############
+declare workspaces-
+#############
+windows-
+    thin borders -
+    alignment-
+    window colors-
+    hide edge border-
+
+############
+bar-
+##########
+startup defaults
+    assign default workspaces
+    declare specific windows as floating
+    sticky window? (sticky toggle) see i3wm
+############
+startup
+    always-compton -f
+    always-feh --bg-scale /directory/image.jpg
+    once- rhythymbox
+    once- firefox
+#############
+key-bindings
+    drag window
+    start terminal
+    launch browser
+
+    kill focused
+    sart- dmenu
+    change focus
+    move focused wiindows
+    split horizontal
+    split vertical
+    fullscreen current window
+    change container layout (stacked, tabbed, split)
+    tiling/floating
+    change focus between tiling/floating
+    focus parent container
+    focused child container
+    switch to workspaces
+    move focused container to workspaces
+    reload configuration file
+    restart i3 inplace
+    exit i3
+    resize widow mode
+    lock
+    brightness controls
+    pulse audio controls
+    media player controls
+    custom bindings
