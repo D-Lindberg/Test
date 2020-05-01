@@ -1,0 +1,8 @@
+steps to change keyboard colors:
+
+d@pop-os:~$ cd /sys/class/leds/system76\:\:kbd_backlight
+d@pop-os:~$ sudo gedit color_center 
+                       color_left
+                       color_right
+                       color_extra
+    set hexidecimal color code and save

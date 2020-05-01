@@ -1,0 +1,160 @@
+    pg_ctlcluster 11 main start
+
+$ pg_lsclusters
+    Ver Cluster Port Status Owner    Data directory              Log file
+    11  main    5432 online postgres /var/lib/postgresql/11/main /var/log/postgresql/postgresql-11-main.log
+
+All the configuration files including the PostgreSQL parameter file sits under the /etc/postgresql directory.
+
+$ ls -R /etc/postgresql
+    /etc/postgresql:
+    11
+
+    /etc/postgresql/11:
+    main
+
+    /etc/postgresql/11/main:
+    conf.d  environment  pg_ctl.conf  pg_hba.conf  pg_ident.conf  postgresql.conf  start.conf
+
+    /etc/postgresql/11/main/conf.d:
+
+$ sudo systemctl start postgresql@11-main
+$ sudo systemctl stop postgresql@11-main
+
+$ pg_ctlcluster 11 main status
+    pg_ctl: server is running (PID: 15544)
+    /usr/lib/postgresql/11/bin/postgres "-D" "/var/lib/postgresql/11/main" "-c" "config_file=/etc/postgresql/11/main/postgresql.conf"
+
+Adding a new PostgreSQL is as simple as executing pg_createcluster with the version of the PostgreSQL and clustername.
+
+$ pg_createcluster 11 standby1
+    Creating new PostgreSQL cluster 11/standby1 ...
+    /usr/lib/postgresql/11/bin/initdb -D /var/lib/postgresql/11/standby1 --auth-local peer --auth-host md5
+    The files belonging to this database system will be owned by user "postgres".
+    This user must also own the server process.
+
+    The database cluster will be initialized with locale "en_US.UTF-8".
+    The default database encoding has accordingly been set to "UTF8".
+    The default text search configuration will be set to "english".
+
+    Data page checksums are disabled.
+
+    fixing permissions on existing directory /var/lib/postgresql/11/standby1 ... ok
+    creating subdirectories ... ok
+    selecting default max_connections ... 100
+    selecting default shared_buffers ... 128MB
+    selecting dynamic shared memory implementation ... posix
+    creating configuration files ... ok
+    running bootstrap script ... ok
+    performing post-bootstrap initialization ... ok
+    syncing data to disk ... ok
+
+    Success. You can now start the database server using:
+
+        pg_ctlcluster 11 standby1 start
+
+    Warning: systemd does not know about the new cluster yet. Operations like "service postgresql start" will not handle it. To fix, run:
+      sudo systemctl daemon-reload
+    Ver Cluster  Port Status Owner    Data directory                  Log file
+    11  standby1 5433 down   postgres /var/lib/postgresql/11/standby1 /var/log/postgresql/postgresql-11-standby1.log
+
+Now let us examine the above output and understand what is happening:
+
+    New datadirectory : /var/lib/postgresql/11/standby1 is initialized. Remember that default instance had data directory at /var/lib/postgresql/11/main
+    Initdb is called with most of the default parameter values
+    Now onwards pg_ctlcluster can be utilized for starting and stopping Instance/Cluster like pg_ctlcluster 11 standby1 start
+    Execution of sudo systemctl daemon-reload is recommended for ensuring proper registration of service with systemd
+    Next available port: 5433 is automatically selected for the new instance
+
+The automatic values taken by pg_clustercreate can be overridden by specifying explicit values as a parameter as follows:
+        $ pg_createcluster 11 anotherdb -d /home/postgres/adb -p 5439
+
+The above command will create a PostgreSQL 11 instance with name “anotherdb” with data directory at /home/postgres/adb and listening at TCP/IP port 5439.
+
+The start command for pg_ctlcluster shows a more reliable way to start the same instance using systemd.
+  $ pg_ctlcluster 11 anotherdb start
+      Warning: the cluster will not be running as a systemd service. Consider using systemctl:
+      sudo systemctl start postgresql@11-anotherdb
+
+
+Stopping the instance also can be done in either way. For example:
+Shell
+pg_ctlcluster 11 anotherdb stop
+1
+	
+pg_ctlcluster 11 anotherdb stop
+
+or
+Shell
+sudo systemctl stop postgresql@11-anotherdb
+1
+	
+sudo systemctl stop postgresql@11-anotherdb
+
+So far we have seen instances of the same version, but we are not limited to the same version. If we need to create an instance of other PostgreSQL version, we just need to install the PostgreSQL binaries for the same.
+Shell
+$ sudo apt install postgresql-10
+1
+	
+$ sudo apt install postgresql-10
+
+Just like the PostgreSQL 11 version discussed, this also will create a “main” instance/cluster by default.
+Shell
+Ver Cluster   Port Status Owner    Data directory                  Log file
+10  main      5434 online postgres /var/lib/postgresql/10/main     /var/log/postgresql/postgresql-10-main.log
+1
+2
+	
+Ver Cluster   Port Status Owner    Data directory                  Log file
+10  main      5434 online postgres /var/lib/postgresql/10/main     /var/log/postgresql/postgresql-10-main.log
+
+We can add more clusters using the new version:
+Shell
+$ pg_createcluster 10 pg10test
+1
+	
+$ pg_createcluster 10 pg10test
+
+Now running pg_lscluster reveals all the postgresql instances running:
+Shell
+$ pg_lsclusters
+Ver Cluster   Port Status Owner    Data directory                  Log file
+10  main      5434 online postgres /var/lib/postgresql/10/main     /var/log/postgresql/postgresql-10-main.log
+10  pg10test  5435 online postgres /var/lib/postgresql/10/pg10test /var/log/postgresql/postgresql-10-pg10test.log
+11  anotherdb 5439 online postgres /home/postgres/adb              /var/log/postgresql/postgresql-11-anotherdb.log
+11  main      5432 online postgres /var/lib/postgresql/11/main     /var/log/postgresql/postgresql-11-main.log
+11  standby1  5433 online postgres /var/lib/postgresql/11/standby1 /var/log/postgresql/postgresql-11-standby1.log
+1
+2
+3
+4
+5
+6
+7
+	
+$ pg_lsclusters
+Ver Cluster   Port Status Owner    Data directory                  Log file
+10  main      5434 online postgres /var/lib/postgresql/10/main     /var/log/postgresql/postgresql-10-main.log
+10  pg10test  5435 online postgres /var/lib/postgresql/10/pg10test /var/log/postgresql/postgresql-10-pg10test.log
+11  anotherdb 5439 online postgres /home/postgres/adb              /var/log/postgresql/postgresql-11-anotherdb.log
+11  main      5432 online postgres /var/lib/postgresql/11/main     /var/log/postgresql/postgresql-11-main.log
+11  standby1  5433 online postgres /var/lib/postgresql/11/standby1 /var/log/postgresql/
+
+
+The major difference is that postgres-common tools keep all configurations in a directory structure under /etc/postgres, while MySQL world deals with single configuration files with multiple sections as documented. For example all the configuration files for PostgreSQL 11 instance “anotherdb” will be under: /etc/postgresql/11/anotherdb. There are mainly 3 configuration files which decide the behavior of service:
+Shell
+$ ls -R /etc/postgresql/11/standby1
+/etc/postgresql/11/standby1:
+conf.d  environment  pg_ctl.conf  pg_hba.conf  pg_ident.conf  postgresql.conf  start.conf
+1
+2
+3
+	
+$ ls -R /etc/postgresql/11/standby1
+/etc/postgresql/11/standby1:
+conf.d  environment  pg_ctl.conf  pg_hba.conf  pg_ident.conf  postgresql.conf  start.conf
+
+    Environment file contains environment variables which are to be applicable for PostgreSQL instance
+    pg_ctl.conf contains cluster specific options which need to be passed to pg_ctl
+    start.conf decides the startup behavior whether an automatic startup or manual startup is required
+
