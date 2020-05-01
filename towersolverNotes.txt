@@ -1,0 +1,58 @@
+notes on towersolver.py
+option 1:   prompt user for size then clues
+option 2:   prompt user for clues
+option 4:   generate clues from a given board
+option 5:   prompt user for size clues and given quares
+
+gameboard of length/size N:
+  N^2 squares
+  2N lines  -N rows plus N columns
+  4N clues  -2 clues per line
+
+Squares:
+  when created need row, column, size of board (spefically N)
+    #Properties:
+      address = (row, column)
+    
+      value  initially 0 and will be changed later when it is solved
+    
+      solved-flag   initially False
+    
+      possible_values   -a set initially containing 1 to N. this will be reduced later
+
+    #Methods:
+      remove(value)   -removes value from possible possible_values
+    
+      mark_solved(value)  -removes value from all neighbors in row and column and changes the value from 0 to the parameter passed into the function as well as change the solved-flag to True
+
+      self_check()  -returns true if possible_values contains only 1 in the set
+
+      not_solved()  -returns the opposite of the solved-flag value
+
+Lines:
+  #Properties:
+    column or row designation
+    
+    easy access to all integers from 1 to N
+    
+    clues   -a list of 2 elements [Top/Left, Bottom/Right]
+    
+    list of addresses of squares it represents
+    
+    list of values or heights -integers 0 to N with 0 being unsolved or undetermined
+    
+    set of unsolved values or heights   -these are the specific values remaining to be solved to complete the line.
+
+    solved  -initially False will change to True when the line is full and meets constraints
+
+  #Methods:
+    isLineValid():
+      uses list of values or heights and clues and returns boolean based on results from comparing countIncreasingHeights(list of values) to clues
+
+    countIncreasing Heights(list of values)
+      returns an integer representing all visible towers from the edge(begining of list of values)
+        it is only 1 sided. also this may be a board method vs line method
+    
+    findAndProcessUniquePossibles()
+      going through the set of unsolved values, create a histogram of occurance of that value as it appears in each square's possible_values set.
+        If any unsolved value has a 1 in the histogram then send the square address that contains the value and the value to the board's set_cell_to function
